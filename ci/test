@@ -28,10 +28,10 @@ for kernel_version in "${kernel_versions[@]}"; do
     --insecure-options=image,all-run \
     --dns=8.8.8.8 \
     --stage1-name="kinvolk.io/aci/rkt/stage1-kvm:${rkt_version},kernelversion=${kernel_version}" \
-    --volume=gobpf,kind=host,source="$PWD" \
-    docker://schu/gobpf-ci \
-    --memory=1024M \
-    --mount=volume=gobpf,target=/go/src/github.com/supershabam/ebpf \
+    --volume=ebpf,kind=host,source="$PWD" \
+    docker://golang:1.8.3-alpine3.6 \
+    --memory=128M \
+    --mount=volume=ebpf,target=/go/src/github.com/supershabam/ebpf \
     --environment=GOPATH=/go \
     --exec=/bin/sh -- -c \
     'cd /go/src/github.com/supershabam/ebpf &&
