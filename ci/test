@@ -22,7 +22,7 @@ sudo ./rkt/rkt image fetch --insecure-options=image "coreos.com/rkt/stage1-kvm:$
 
 for kernel_version in "${kernel_versions[@]}"; do
   rm -f ./rkt-uuid
-  ./rkt/rkt \
+  sudo ./rkt/rkt \
     run --interactive \
     --uuid-file-save=./rkt-uuid \
     --insecure-options=image,all-run \
@@ -35,8 +35,6 @@ for kernel_version in "${kernel_versions[@]}"; do
     --environment=GOPATH=/go \
     --exec=/bin/sh -- -c \
     'cd /go/src/github.com/supershabam/ebpf &&
-      mount -t tmpfs tmpfs /tmp &&
-      mount -t debugfs debugfs /sys/kernel/debug/ &&
       go test -v ./...'
 
   test_status=$(sudo ./rkt/rkt status "$(<rkt-uuid)" | awk '/app-/{split($0,a,"=")} END{print a[2]}')
