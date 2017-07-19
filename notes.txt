@@ -1,0 +1,7 @@
+https://www.kernel.org/doc/Documentation/trace/kprobetrace.txt
+
+bpf_attach_kprobe
+https://github.com/iovisor/bcc/blob/a12db19ecfcb9759c27feae4388764127f9d5386/src/cc/libbpf.c#L386
+
+bpf_attach_tracing_event
+https://github.com/iovisor/bcc/blob/a12db19ecfcb9759c27feae4388764127f9d5386/src/cc/libbpf.c#L337

@@ -1,29 +1,5 @@
-package main_test
+package ebpf
 
-import (
-	"bytes"
-	"encoding/binary"
-	"fmt"
-	"strconv"
-	"syscall"
-	"testing"
-	"unsafe"
-)
-
-
-
-
-// struct { /* anonymous struct used by BPF_PROG_LOAD command */
-// 	__u32		prog_type;	/* one of enum bpf_prog_type */
-// 	__u32		insn_cnt;
-// 	__aligned_u64	insns;
-// 	__aligned_u64	license;
-// 	__u32		log_level;	/* verbosity level of verifier */
-// 	__u32		log_size;	/* size of user buffer */
-// 	__aligned_u64	log_buf;	/* user supplied buffer */
-// 	__u32		kern_version;	/* checked when prog_type=kprobe */
-// 	__u32		prog_flags;
-// }
 
 
 type bpfProgLoadConfig struct {
@@ -84,37 +60,4 @@ func bpfProg(config *bpfProgLoadConfig) {
 	use(gc)
 	r0, _, e1 := syscall.Syscall(syscallBPF, uintptr(int(bpfProgLoad)), uintptr(ptr), uintptr(n))
 	fmt.Printf("r0: %d\ne1: %d\n", r0, e1)
-}
-
-func TestBPF(t *testing.T) {
-	// bpfMap(&bpfMapCreateConfig{
-	// 	mapType:    1,
-	// 	keySize:    8,
-	// 	valueSize:  8,
-	// 	maxEntries: 32,
-	// })
-
-	config := &bpfProgLoadConfig{
-		ProgType: SockerFilter,
-		Instns: []BPFInst{
-			0xb7, // BPF_MOV64_IMM(BPF_REG_0, 0)
-			0x95, // return r0
-		},
-		License:    "GPL",
-		LogLevel:   1,
-		LogBufSize: 255,
-	}
-	bpfProg(config)
-	fmt.Printf("log: %s\n", config.Log)
-
-	// bpfProg(&bpfAttr{
-	// 	progType:    bpfProgTypeKProbe,
-	// 	insns:       []uint64{0x95},
-	// 	license:     "GPL",
-	// 	logLevel:    1,
-	// 	log:         make([]uint64, 256),
-	// 	kernVersion: 0x0a0b0c0d,
-	// 	flags:       0,
-	// })
-	// time.Sleep(time.Minute * 5)
 }
